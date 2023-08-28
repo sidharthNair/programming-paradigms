@@ -1,0 +1,11 @@
+// Name use error (class)
+project NameUseError
+    class B extends A {
+    }
+{
+    void entry()
+    C c;
+    {
+        print('o');
+    }
+}

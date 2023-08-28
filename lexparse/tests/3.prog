@@ -1,0 +1,9 @@
+// Parser error
+project Example
+{
+    void entry()
+        int x, y;
+    {
+        int z;
+    }
+}

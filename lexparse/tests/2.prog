@@ -1,0 +1,16 @@
+// Lexer error (*2)
+project aa@@
+    class A {
+    }
+    A what;
+{
+    void entry()
+        A a;
+        int b;
+        char c;
+    {
+        if (a > b) {
+            print(c);
+        }
+    }
+}

@@ -1,0 +1,8 @@
+#!/bin/bash
+
+# NOTE: you can edit this file to run your parser and semantic
+# analysis.  We will only give as input one argument ($1), which is
+# the path to the input program to parse/analyize.
+
+cp="$(pwd)/../antlr-4.9.2-complete.jar"
+java -Xmx500M -cp ${cp}:. org.antlr.v4.gui.TestRig SimpleLang r -tree $1

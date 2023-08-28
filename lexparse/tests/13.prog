@@ -1,0 +1,3 @@
+// No error (obfuscated)
+project XXX
+const boolean xx = 10; enum XXXX { Y, YY, YYY = 10 } interface N { int ff(int i); int fff(int i); } class XXXXX implements N { int aaa[], aaaa[]; { void gg (int a, int b) { this.aaa[b]=a; } void ggg (int a, int b) { this.aaaa[b]=a; } int ff (int b) { return aaa[b]; } int fff (int b) { return aaaa[b]; } } } XXXXX v; { void f(char o, int p, int q) int x; { x = q; } void entry() int x, i; char c; { v = new XXXXX; v.aaa = new int [xx]; v.aaaa = new int [xx]; for (i = 0; i<xx; i++) { v.gg(0,i); v.ggg(0,i); } f(c, x, i); read(x); for(;x > 0;) { if (XXXX.Y <= x && x < xx) { v.gg(v.ff(x)+XXXX.YY); } else { if (-xx < x && x < 0) { v.ggg(v.fff(-x)+1); } } read(x); } } }

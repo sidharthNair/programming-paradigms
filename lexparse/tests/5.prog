@@ -1,0 +1,8 @@
+// Name use error (method)
+project NameUseError
+{
+    void entry()
+    {
+        f();
+    }
+}

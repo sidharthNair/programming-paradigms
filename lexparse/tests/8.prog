@@ -1,0 +1,13 @@
+// Var error (in formPars)
+project VarError
+{
+    int f(char a, int a)
+    {
+        return ord(a) + a;
+    }
+
+    void entry()
+    {
+        print(f('a', 1));
+    }
+}

@@ -1,0 +1,18 @@
+// NO var error (same name in different scopes)
+project NoVarError
+    const int i = 0;
+{
+    int f(int i)
+    {
+        if (i == 0 || i == 1)
+            return i;
+        else
+            return i * f(i);
+    }
+    void entry()
+        int i;
+    {
+        read(i);
+        print(f(i));
+    }
+}

@@ -1,0 +1,14 @@
+// Main error
+project MainError
+{
+    int random()
+    {
+        return 42;
+    }
+
+    int entry()
+    {
+        // The return type is wrong
+        return random();
+    }
+}

@@ -1,0 +1,14 @@
+// Var error (formPars X varDecl)
+project VarError
+{
+    void f(int i)
+        int i;
+    {
+        print(i);
+    }
+
+    void entry()
+    {
+        f();
+    }
+}
