@@ -57,7 +57,7 @@ Statement =  DesignatorStatement ";"
   | "print" "(" Expr ["," numConst] ")" ";"
   | "{" {Statement} "}".
 
-DesignatorStatement = Designator (Assignop Expr | "(" [ActPars] ")" | "++" | "--").
+DesignatorStatement = Designator ((Assignop Expr) | "(" [ActPars] ")" | "++" | "--").
 
 ActPars = Expr {"," Expr}.
 
@@ -78,7 +78,7 @@ Factor = Designator ["(" [ActPars] ")"]
   | "new" Type ["[" Expr "]"]
   | "(" Expr ")".
 
-Designator = ident {"." ident | "[" Expr "]"}.
+Designator = ident {("." ident) | "[" Expr "]"}.
 
 Assignop = "=".
 
@@ -110,7 +110,7 @@ OUTPUT: if there is any lexical error, print "LEX ERROR" to the stdout.
 
 ### Semantics ###
 
- - Each name must be declared before its fist use.
+ - Each name must be declared before its first use.
    OUTPUT: if this error happens, output "NAME USE ERROR" to the stdout.
  - There cannot be two variables with the same name in one scope.
    OUTPUT: if this error happens, output "VAR ERROR" to the stdout.
