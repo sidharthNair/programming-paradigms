@@ -22,6 +22,12 @@ public class Main {
             System.out.println("NAME USE ERROR");
         }
 
+        DuplicateVisitor duplicateVisitor = new DuplicateVisitor();
+        duplicateVisitor.visit(tree);
+        if (duplicateVisitor.foundDuplicate) {
+            System.out.println("VAR ERROR");
+        }
+
         EntryVisitor entryVisitor = new EntryVisitor();
         boolean foundEntry = entryVisitor.visit(tree);
         if (!foundEntry) {
