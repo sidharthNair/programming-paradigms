@@ -4,6 +4,9 @@ public class EntryVisitor extends SimpleLangBaseVisitor<Boolean> {
 
     public Boolean visitProject(SimpleLangParser.ProjectContext ctx) {
         visitChildren(ctx);
+        if (!found) {
+            System.out.println("Valid entry() function not found");
+        }
         return found;
     }
 
