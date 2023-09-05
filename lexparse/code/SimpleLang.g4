@@ -23,7 +23,7 @@ CONTINUE        : 'continue' ;
 IDENT           : CHAR (CHAR | DIGIT | '_')* ;
 NUMCONST        : DIGIT (DIGIT)* ;
 CHARCONST       : '\'' [\u0020-\u007E] '\'' ;
-BOOLEANCONST    : ('True' | 'False') ;
+BOOLEANCONST    : ('true' | 'false') ;
 ASSIGN          : '=' ;
 PLUS            : '+' ;
 MINUS           : '-' ;
@@ -41,7 +41,6 @@ OR              : '||' ;
 
 WHITESPACE      : [ \t\r\n]+ -> skip ;
 COMMENT         : '//' (~[\r\n])* -> skip ;
-OTHER           : . ;
 
 project     : PROJECT IDENT (constDecl | varDecl | classDecl | enumDecl | interfaceDecl)* '{' (methodDecl)* '}' ;
 
@@ -51,8 +50,8 @@ constSet    : IDENT ASSIGN (NUMCONST | CHARCONST | BOOLEANCONST) ;
 enumDecl    : ENUM IDENT '{' enumSet (',' enumSet)* '}' ;
 enumSet     : IDENT (ASSIGN NUMCONST)? ;
 
-varDecl     : type var (',' var)* ';' ;
-var         : IDENT ('[' ']')? ;
+varDecl     : type varSet (',' varSet)* ';' ;
+varSet      : IDENT ('[' ']')? ;
 
 classDecl   : CLASS IDENT (EXTENDS type)? (IMPLEMENTS type (',' type)*)? '{' (varDecl)* ('{' (methodDecl)* '}')? '}' ;
 
