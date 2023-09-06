@@ -1,0 +1,36 @@
+// Wrong class interface implementation
+project test
+    interface I {
+        int getp(int i);
+        int getn(int i);
+        int getSum(int i);
+        void printElems();
+    }
+
+    class Table implements I {
+        int pos[], neg[];
+        {
+            void  putp(int a, int idx) { this.pos[idx]=a; }
+            void  putn (int a, int idx) { this.neg[idx]=a; }
+            int  getp (int idx) { return pos[idx]; }
+            int  getn (int idx) { return neg[idx]; }
+            int  getSum1 (int i)
+                int ret;
+            {
+                ret = this.pos[i] + this.neg[i];
+                return ret;
+            }
+            char getSum2 (int i) {}
+            int  getSum3 (char c) {}
+        }
+    }
+
+    Table val;
+{
+    void entry()
+    {
+        val.putp (1, 0);
+        val.putn (-2, 0);
+        print (val.getSum1(0));
+    }
+}
