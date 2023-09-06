@@ -7,7 +7,14 @@ project test
         void printElems();
     }
 
-    class Table implements I {
+    interface TestIface {
+        void printElems();
+        int testing(int x[]);
+    }
+
+    interface Empty {}
+
+    class Table implements I, TestIface, Empty {
         int pos[], neg[];
         {
             void  putp(int a, int idx) { this.pos[idx]=a; }
@@ -22,6 +29,12 @@ project test
             }
             char getSum2 (int i) {}
             int  getSum3 (char c) {}
+        }
+    }
+
+    class A implements TestIface {
+        {
+            void printElems() {}
         }
     }
 

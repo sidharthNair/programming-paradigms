@@ -1,3 +1,9 @@
+## Assignment for Programming Paradigms ##
+
+Additional semantic check: ClassVisitor.java. This visitor checks to see whether classes that implement interfaces actually provide implementations of every corresponding interface method. If a class doesn't implement a method, an error will be displayed which shows the unimplemented method.
+
+Test files: `tests/cv_success.prog`, `cv_fail.prog`
+
 
 ### Intro ###
 
@@ -29,7 +35,7 @@ repeat zero or more times between {and}.
 
 Project = "project" ident {ConstDecl | VarDecl | ClassDecl| EnumDecl | InterfaceDecl} "{" {MethodDecl} "}".
 
-ConstDecl = "const" Type ident "=" (numConst | charConst| booleanConst) {, ident "=" (numConst | charConst | booleanConst)} ";".
+ConstDecl = "const" Type ident "=" (numConst | charConst | booleanConst) {, ident "=" (numConst | charConst | booleanConst)} ";".
 
 EnumDecl = "enum" ident "{" ident ["=" numConst] {"," ident ["=" numConst]} "}".
 
