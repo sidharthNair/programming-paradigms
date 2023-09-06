@@ -52,8 +52,7 @@ public class ClassVisitor extends SimpleLangBaseVisitor<Object> {
                     parameters += pctx.type().getText() + (isArray((ParserRuleContext) pctx) ? "[]" : "") + ", ";
                 }
                 parameters = parameters.substring(0, parameters.length() - 2) + ")";
-            }
-            else {
+            } else {
                 parameters += ")";
             }
             classMethods.get(className).add(returnType + " " + methodName + parameters);
@@ -76,8 +75,7 @@ public class ClassVisitor extends SimpleLangBaseVisitor<Object> {
                 parameters += pctx.type().getText() + (isArray((ParserRuleContext) pctx) ? "[]" : "") + ", ";
             }
             parameters = parameters.substring(0, parameters.length() - 2) + ")";
-        }
-        else {
+        } else {
             parameters += ")";
         }
         interfaceMethods.get(interfaceName).add(returnType + " " + methodName + parameters);

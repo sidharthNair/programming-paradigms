@@ -12,8 +12,8 @@ public class EntryVisitor extends SimpleLangBaseVisitor<Boolean> {
 
     public Boolean visitMethodDecl(SimpleLangParser.MethodDeclContext ctx) {
         found |= ctx.IDENT().getText().equals("entry")
-                        && ctx.VOID() != null
-                        && ctx.formPars() == null;
+                && ctx.VOID() != null
+                && ctx.formPars() == null;
         return visitChildren(ctx);
     }
 

@@ -37,8 +37,7 @@ public class ScopeNode extends Node {
         return child;
     }
 
-    // If a classParent object is passed then we know this scope defines a
-    // class
+    // If a classParent object is passed then we know this scope defines a class
     public ScopeNode newChildScope(String name, String classParent) {
         ScopeNode child = new ScopeNode(name);
         child.classParent = classParent;
@@ -137,13 +136,13 @@ public class ScopeNode extends Node {
                 }
                 if (symbolTable.containsKey(identifier)
                         && (symbolTable.get(identifier).equals("_class")
-                            || symbolTable.get(identifier).equals("_enum"))) {
+                                || symbolTable.get(identifier).equals("_enum"))) {
                     return this;
                 }
                 break;
             case VAR_NAME:
                 if (symbolTable.containsKey(identifier)
-                    && (!this.scopeName.equals("project"))) {
+                        && (!this.scopeName.equals("project"))) {
                     return this;
                 }
                 break;
@@ -158,7 +157,7 @@ public class ScopeNode extends Node {
         }
     }
 
-    // Recursively searches class hierarchy for word starting at class className
+    // Searches class hierarchy for word starting at class className
     public static ScopeNode searchClassHierarchy(String className, String word) {
         ScopeNode classScope = classMap.get(className);
         do {
@@ -180,7 +179,7 @@ public class ScopeNode extends Node {
         }
         System.out.println("}");
         for (Node n : this.children) {
-             ((ScopeNode) n).printScopeTree(prefix + "  ");
+            ((ScopeNode) n).printScopeTree(prefix + "  ");
         }
     }
 }
