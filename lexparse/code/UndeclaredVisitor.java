@@ -23,7 +23,7 @@ public class UndeclaredVisitor extends SimpleLangBaseVisitor<Object> {
         ScopeNode curr = stack.peek();
         String type = ((SimpleLangParser.ConstDeclContext) ctx.getParent()).type().getText();
         if (curr.checkDeclared(type, IdentifierType.DECL_TYPE) == null) {
-            error(type);
+            error(type, curr.scopeName);
         }
         curr.addSymbol(ctx.IDENT().getText(), type);
         return visitChildren(ctx);
@@ -45,7 +45,7 @@ public class UndeclaredVisitor extends SimpleLangBaseVisitor<Object> {
         ScopeNode curr = stack.peek();
         String type = ((SimpleLangParser.VarDeclContext) ctx.getParent()).type().getText();
         if (curr.checkDeclared(type, IdentifierType.DECL_TYPE) == null) {
-            error(type);
+            error(type, curr.scopeName);
         }
         curr.addSymbol(ctx.IDENT().getText(), type + (isArray(ctx) ? "[]" : ""));
         return visitChildren(ctx);
@@ -58,13 +58,13 @@ public class UndeclaredVisitor extends SimpleLangBaseVisitor<Object> {
         if (ctx.EXTENDS() != null) {
             parent = ctx.type(typeIndex++).IDENT().getText();
             if (curr.checkDeclared(parent, IdentifierType.EXTENDS) == null) {
-                error(parent);
+                error(parent, curr.scopeName);
             }
         }
         for (int i = typeIndex; i < ctx.type().size(); i++) {
             String iface = ctx.type(i).IDENT().getText();
             if (curr.checkDeclared(iface, IdentifierType.IMPLEMENTS) == null) {
-                error(iface);
+                error(iface, curr.scopeName);
             }
         }
         String className = ctx.IDENT().getText();
@@ -90,7 +90,7 @@ public class UndeclaredVisitor extends SimpleLangBaseVisitor<Object> {
         ScopeNode curr = stack.peek();
         String returnType = (ctx.type() == null ? "void" : ctx.type().IDENT().getText());
         if (curr.checkDeclared(returnType, IdentifierType.RETURN_TYPE) == null) {
-            error(returnType);
+            error(returnType, curr.scopeName);
         }
         String ifaceMethodName = ctx.IDENT().getText();
         curr.addSymbol(ifaceMethodName, "_interface_method");
@@ -104,7 +104,7 @@ public class UndeclaredVisitor extends SimpleLangBaseVisitor<Object> {
         ScopeNode curr = stack.peek();
         String returnType = (ctx.type() == null ? "void" : ctx.type().IDENT().getText());
         if (curr.checkDeclared(returnType, IdentifierType.RETURN_TYPE) == null) {
-            error(returnType);
+            error(returnType, curr.scopeName);
         }
         String methodName = ctx.IDENT().getText();
         curr.addSymbol(methodName, "_method");
@@ -118,7 +118,7 @@ public class UndeclaredVisitor extends SimpleLangBaseVisitor<Object> {
         ScopeNode curr = stack.peek();
         String type = ctx.type().getText();
         if (curr.checkDeclared(type, IdentifierType.DECL_TYPE) == null) {
-            error(type);
+            error(type, curr.scopeName);
         }
         curr.addSymbol(ctx.IDENT().getText(), type + (isArray((ParserRuleContext) ctx) ? "[]" : ""));
         return visitChildren(ctx);
@@ -126,12 +126,13 @@ public class UndeclaredVisitor extends SimpleLangBaseVisitor<Object> {
 
     public Object visitDesignator(SimpleLangParser.DesignatorContext ctx) {
         ScopeNode curr = stack.peek();
+        String scope = curr.scopeName;
         String token = ctx.IDENT(0).getText();
         String next;
         if (ctx.getChildCount() == 1) {
             ScopeNode found = curr.checkDeclared(token, IdentifierType.SINGLE);
             if (found == null) {
-                error(token);
+                error(token, scope);
             }
         } else {
             for (int i = 1; i < ctx.getChildCount(); i++) {
@@ -140,13 +141,13 @@ public class UndeclaredVisitor extends SimpleLangBaseVisitor<Object> {
                     next = ctx.getChild(++i).getText();
                     curr = curr.checkDeclared(token + "." + next, IdentifierType.DOT);
                     if (curr == null) {
-                        error(token + "." + next);
+                        error(token + "." + next, scope);
                     }
                     token = next;
                 } else {
                     curr = curr.checkDeclared(token, IdentifierType.ARRAY_INDEX);
                     if (curr == null) {
-                        error(token + "[EXPR]");
+                        error(token + "[EXPR]", scope);
                     }
                     i += 3;
                 }
@@ -156,9 +157,9 @@ public class UndeclaredVisitor extends SimpleLangBaseVisitor<Object> {
         return visitChildren(ctx);
     }
 
-    public void error(String var) {
-        System.out.println("Found undeclared reference: " + var);
-        root.printScopeTree("\t");
+    public void error(String var, String scope) {
+        System.out.println("Found undeclared reference '" + var + "' in scope '" + scope + "'");
+        root.printScopeTree("  ");
         foundUndeclared = true;
     }
 

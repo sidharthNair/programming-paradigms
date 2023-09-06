@@ -39,7 +39,7 @@ public class DuplicateVisitor extends SimpleLangBaseVisitor<Object> {
         ScopeNode curr = stack.peek();
         String name = ctx.IDENT().getText();
         if (curr.checkDeclared(name, IdentifierType.VAR_NAME) != null) {
-            error(name);
+            error(name, curr.scopeName);
         }
         String type = ((SimpleLangParser.VarDeclContext) ctx.getParent()).type().getText();
         curr.addSymbol(ctx.IDENT().getText(), type + (isArray(ctx) ? "[]" : ""));
@@ -98,16 +98,16 @@ public class DuplicateVisitor extends SimpleLangBaseVisitor<Object> {
         ScopeNode curr = stack.peek();
         String name = ctx.IDENT().getText();
         if (curr.checkDeclared(name, IdentifierType.VAR_NAME) != null) {
-            error(name);
+            error(name, curr.scopeName);
         }
         String type = ctx.type().getText();
         curr.addSymbol(ctx.IDENT().getText(), type + (isArray((ParserRuleContext) ctx) ? "[]" : ""));
         return visitChildren(ctx);
     }
 
-    public void error(String var) {
-        System.out.println("Found duplicate variable name in same scope: " + var);
-        root.printScopeTree("\t");
+    public void error(String var, String scope) {
+        System.out.println("Found duplicate variable name '" + var + "' in scope '" + scope + "'");
+        root.printScopeTree("  ");
         foundDuplicate = true;
     }
 
