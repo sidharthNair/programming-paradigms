@@ -1,0 +1,26 @@
+// Success
+project Duplicate
+    interface I {
+        int getp(int i);
+        int getn(int i);
+    }
+
+    class Table implements I {
+        int pos[], neg[];
+        {
+            void putp(int a, int idx) { this.pos[idx]=a; }
+            void putn (int a, int idx) { this.neg[idx]=a; }
+            int getp (int idx) { return pos[idx]; }
+            int getn (int idx) { return neg[idx]; }
+            int getp (int asd) { return pos[asd]; }
+        }
+    }
+
+{
+    void entry()
+        int x;
+        {
+            x = 1;
+            length(x);
+        }
+}

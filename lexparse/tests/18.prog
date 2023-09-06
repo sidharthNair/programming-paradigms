@@ -1,0 +1,60 @@
+// Successful
+project rect
+    const int size = 10;
+    enum Num { ZERO, ONE, TWO, THREE, FOUR, FIVE, SIX }
+
+    class Object {
+        int id;
+        int size;
+        {
+            int getid() { return id; }
+        }
+    }
+
+    class Point extends Object {
+        int x, y;
+    }
+
+    interface getP1x {
+        int getp1x();
+    }
+
+    class Rectangle extends Object implements getP1x {
+        Point p1;
+        Point p2;
+        Point p3;
+        Point p4;
+        {
+            int getp1x() { return this.p1.x; }
+            int getp2y() { return p2.y; }
+            int id() { return getid(); }
+            int size() { return this.size; }
+        }
+    }
+
+    Rectangle rect;
+{
+    int main2(int arg)
+        int x;
+        {
+            x = arg;
+            length(x);
+        }
+
+    int must(int b)
+        int a;
+        {
+            a = 5;
+            return a;
+        }
+
+    void entry()
+        int x, i;
+        char c;
+        {
+            //---- Initialize val
+            rect = new Rectangle;
+            rect.id = 5;
+            rect.size = 3;
+        }
+}

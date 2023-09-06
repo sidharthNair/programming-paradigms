@@ -1,0 +1,72 @@
+// Successful
+project testing
+    enum dayOfWeek {
+        SUNDAY,
+        MONDAY,
+        TUESDAY,
+        WEDNESDAY,
+        THURSDAY,
+        FRIDAY,
+        SATURDAY
+    }
+    class Object {
+        int id;
+        int mem_size;
+        {
+            int getid() { return id; }
+            int size() { return mem_size; }
+        }
+    }
+    class Person extends Object {
+        char firstInitial;
+        char secondInitial;
+        int age;
+    }
+
+    class Employee extends Person {
+        int job_id;
+        int pay;
+        dayOfWeek workingDays[];
+        {
+            dayOfWeek firstWorkingDay() { return workingDays[0]; }
+        }
+    }
+
+    class Boss extends Employee {
+        int numSubordinates;
+        Employee employees[];
+        {
+            void addSubordinate(Employee e) { employees[numSubordinates] = e; numSubordinates++; }
+            int getNumWorkingFor() { return numSubordinates; }
+        }
+    }
+{
+    int must(Boss b)
+        int a;
+        {
+            a = 5;
+            return a;
+        }
+
+    void entry()
+        Boss b;
+        Employee e;
+        int i;
+        {
+            print (i);
+            b = new Boss;
+            b.job_id = must(b);
+            b.pay = 1000;
+            b.workingDays = new dayOfWeek[5];
+            for (i = 0; i < 5; i++)
+            {
+                b.workingDays[i] = dayOfWeek.MONDAY + i;
+            }
+            b.mem_size = 10;
+            print (b.size());
+            print (b.firstWorkingDay());
+            print (dayOfWeek.SUNDAY);
+            b.addSubordinate(e);
+            print (b.getNumWorkingFor());
+        }
+}
