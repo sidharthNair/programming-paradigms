@@ -16,30 +16,12 @@ public class DuplicateVisitor extends SimpleLangBaseVisitor<Object> {
         return result;
     }
 
-    public Object visitConstSet(SimpleLangParser.ConstSetContext ctx) {
-        ScopeNode curr = stack.peek();
-        String type = ((SimpleLangParser.ConstDeclContext) ctx.getParent()).type().getText();
-        curr.addSymbol(ctx.IDENT().getText(), type);
-        return visitChildren(ctx);
-    }
-
-    public Object visitEnumDecl(SimpleLangParser.EnumDeclContext ctx) {
-        ScopeNode curr = stack.peek();
-        curr.addSymbol(ctx.IDENT().getText(), "_enum");
-        return visitChildren(ctx);
-    }
-
-    public Object visitEnumSet(SimpleLangParser.EnumSetContext ctx) {
-        ScopeNode curr = stack.peek();
-        curr.addSymbol(ctx.IDENT().getText(), "_enum_val");
-        return visitChildren(ctx);
-    }
-
     public Object visitVarSet(SimpleLangParser.VarSetContext ctx) {
         ScopeNode curr = stack.peek();
         String name = ctx.IDENT().getText();
-        if (curr.checkDeclared(name, IdentifierType.VAR_NAME) != null) {
-            error(name, curr.scopeName);
+        ScopeNode found = curr.checkDeclared(name, IdentifierType.VAR_NAME);
+        if (found != null) {
+            error(name, curr.scopeName, found.scopeName);
         }
         String type = ((SimpleLangParser.VarDeclContext) ctx.getParent()).type().getText();
         curr.addSymbol(ctx.IDENT().getText(), type + (isArray(ctx) ? "[]" : ""));
@@ -97,16 +79,17 @@ public class DuplicateVisitor extends SimpleLangBaseVisitor<Object> {
     public Object visitParameter(SimpleLangParser.ParameterContext ctx) {
         ScopeNode curr = stack.peek();
         String name = ctx.IDENT().getText();
-        if (curr.checkDeclared(name, IdentifierType.VAR_NAME) != null) {
-            error(name, curr.scopeName);
+        ScopeNode found = curr.checkDeclared(name, IdentifierType.VAR_NAME);
+        if (found != null) {
+            error(name, curr.scopeName, found.scopeName);
         }
         String type = ctx.type().getText();
         curr.addSymbol(ctx.IDENT().getText(), type + (isArray((ParserRuleContext) ctx) ? "[]" : ""));
         return visitChildren(ctx);
     }
 
-    public void error(String var, String scope) {
-        System.out.println("Found duplicate variable name '" + var + "' in scope '" + scope + "'");
+    public void error(String var, String scope, String found) {
+        System.out.println("Found duplicate variable name '" + var + "' in scope '" + scope + "', first found in containing scope '" + found + "'");
         root.printScopeTree("  ");
         foundDuplicate = true;
     }

@@ -141,8 +141,7 @@ public class ScopeNode extends Node {
                 }
                 break;
             case VAR_NAME:
-                if (symbolTable.containsKey(identifier)
-                        && (!this.scopeName.equals("project"))) {
+                if (symbolTable.containsKey(identifier)) {
                     return this;
                 }
                 break;
