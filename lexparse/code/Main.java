@@ -43,6 +43,8 @@ public class Main {
             System.out.println("CLASS INTERFACE ERROR");
             System.exit(6);
         }
+
+        System.out.println("Success");
     }
 }
 
