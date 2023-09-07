@@ -27,8 +27,8 @@ project test
                 ret = this.pos[i] + this.neg[i];
                 return ret;
             }
-            char getSum2 (int i) {}
-            int  getSum3 (char c) {}
+            char getSum (int i) {}
+            int  getSum (char c) {}
         }
     }
 
@@ -44,6 +44,6 @@ project test
     {
         val.putp (1, 0);
         val.putn (-2, 0);
-        print (val.getSum1(0));
+        print (val.getSum(0));
     }
 }
