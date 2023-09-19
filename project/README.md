@@ -41,6 +41,9 @@ your group % N => your item
 
 N will be defined in each section below, so pay attention.
 
+```
+sn25377 = 115 110 50 53 51 55 55 --> 489
+```
 
 ## Components
 
@@ -105,6 +108,10 @@ lexer+parser.) If the input cannot be parsed, give a nice error (your
 decision what the error should say) and ask for the next input. If the
 input is correct, move to the next step.
 
+```
+489 % 4 = 1 --> C/C++ lexer+parser
+```
+
 Once the input is successfully parsed, you should prepare a request
 for the server and send it (json). You can write request code in any
 language you wish.
@@ -112,6 +119,10 @@ language you wish.
 Upon receiving a response (json), you should store the response into a
 local relational database. We define N=2 in this case: 0-h2 database,
 1-sqlite database. The result should always be a single table.
+
+```
+489 % 2 = 1 --> sqlite database
+```
 
 Every response should be cached (you already stored it in a local db),
 so that any future input/request that uses the same input do not need
@@ -171,7 +182,9 @@ computed.
 Your implementation should work under the following configuration:
 * Linux (any recent distribution)
 * N=2: 0 - Oracle Java 17 (https://www.oracle.com/java/technologies/downloads); 1 - Oracle Java 11
+    * `489 % 2 = 1 --> Oracle Java 11`
 * N=2: 0 - Neo4j v5.x (cloud Graph Database Self-Managed community edition https://neo4j.com/deployment-center); 1 - Neo4j v4.x
+    * `489 % 2 = 1 --> Neo4j v4.x`
 * Smalltalk Pharo 11 (https://pharo.org/download)
 * Go 1.18+
 * Python 3.8+
