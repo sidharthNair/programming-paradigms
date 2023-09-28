@@ -32,7 +32,7 @@ set -e
 
     echo "Building ..."
     cmake -Wno-dev -DCMAKE_BUILD_TYPE=Release .
-    make -j 8
+    make -j $(nproc --all)
 
     printf "Running executable ...\n\n"
     ./cypher
