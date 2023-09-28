@@ -213,6 +213,22 @@ We will split the project in three parts.
 
 Due October 2.
 
+Expected to deliver:
+
+* A script (bash, Python, or something else that can run easily on Linux) that sets up Neo4j locally and demostrates successul run of the database.  The script should be end-to-end without any manual step required on the user end.
+* Code that implements a client (as described earlier in this document) that gets input(s), checks queries, prints proper message.
+* Code that is needed for checking if queries are valid. (You can commit/push code for checking even if files are auto generated.)
+
+Do NOT include the following:
+
+* Source code for Neo4j
+* Neo4j in any form
+* Any other library
+
+Whatever you need, should be downloaded by the scripts you are
+using/writing. Basically, do not include necessary binaries into your
+repository.
+
 *Part 2*
 
 * Visualization in Smalltalk by reading a json file from a file system and visualizing
