@@ -13,8 +13,6 @@ set -e
         )
     fi
 
-    cp="$(pwd)/thirdparty/antlr-4.13.1-complete.jar"
-
     if ! java --version |& grep 'build 11' >/dev/null; then
         echo "ERROR: Please use Java 11"
         exit 1
@@ -31,8 +29,8 @@ set -e
     fi
 
     echo "Building ..."
-    cmake -Wno-dev -DCMAKE_BUILD_TYPE=Release .
-    make -j $(nproc --all)
+    cmake -Wno-dev -DCMAKE_BUILD_TYPE=Release . 2>> build.log
+    make -j $(nproc --all) 2>> build.log
 
     printf "Running executable ...\n\n"
     ./cypher

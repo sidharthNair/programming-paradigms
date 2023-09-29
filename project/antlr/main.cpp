@@ -9,21 +9,39 @@ using namespace antlr4;
 
 int main(int, const char **)
 {
-    ANTLRInputStream input("create (:Person {name: \"Alice\", age: 25})");
-    CypherLexer lexer(&input);
-    CommonTokenStream tokens(&lexer);
-
-    tokens.fill();
-    for (auto token : tokens.getTokens())
+    while (true)
     {
-        std::cout << token->toString() << std::endl;
+        std::cout << "(cypher) > ";
+        std::string command;
+        getline(std::cin, command);
+
+        if (command.empty())
+        {
+            continue;
+        }
+
+        ANTLRInputStream input(command);
+        CypherLexer lexer(&input);
+        CommonTokenStream tokens(&lexer);
+
+        tokens.fill();
+        if (lexer.getNumberOfSyntaxErrors() > 0)
+        {
+            std::cout << std::endl;
+            continue;
+        }
+
+        CypherParser parser(&tokens);
+        tree::ParseTree *tree = parser.oC_Cypher();
+        if (parser.getNumberOfSyntaxErrors() > 0)
+        {
+            std::cout << std::endl;
+            continue;
+        }
+
+        std::cout << "successful command" << std::endl
+                  << std::endl;
     }
-
-    CypherParser parser(&tokens);
-    tree::ParseTree *tree = parser.oC_Cypher();
-
-    std::cout << tree->toStringTree(&parser) << std::endl
-              << std::endl;
 
     return 0;
 }
