@@ -1,4 +1,4 @@
-echo "export PATH=\$PATH:/usr/local/go/bin" >> ~/.bashrc
+#!/bin/bash
 
 if ! which go &> /dev/null
 then
