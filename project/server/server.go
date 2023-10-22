@@ -17,9 +17,9 @@ const neo4jPassword = "neo4j"
 func formatValue(value interface{}) string {
 	switch v := value.(type) {
 	case dbtype.Node:
-		return fmt.Sprintf("%d | %v | %v", v.Id, v.Labels, v.Props)
+		return fmt.Sprintf("%d %v %v", v.Id, v.Labels, v.Props)
 	case dbtype.Relationship:
-		return fmt.Sprintf("%d | %s | %v | %d -> %d", v.Id, v.Type, v.Props, v.StartId, v.EndId)
+		return fmt.Sprintf("%d (%d)-[%s]-(%d) %v", v.Id, v.StartId, v.Type, v.EndId, v.Props)
 	default:
 		return fmt.Sprintf("%v", v)
 	}
@@ -49,32 +49,47 @@ func request(w http.ResponseWriter, r *http.Request) {
 
 	result, err := neo4j.ExecuteQuery(ctx, driver, query, nil, neo4j.EagerResultTransformer, neo4j.ExecuteQueryWithDatabase("neo4j"))
 	if err != nil {
-		http.Error(w, "Failed to execute the Neo4j query", http.StatusInternalServerError)
+		http.Error(w, fmt.Sprintf("%s", err), http.StatusInternalServerError)
 		fmt.Println(err)
 		return
 	}
 
 	var response string
 
+	var length int = 0
 	for _, record := range result.Records {
-		response += "{\n\t"
-		for i, key := range record.Keys {
+		var tmp string
+		for _, key := range record.Keys {
 			value, _ := record.Get(key)
-			response += key + ": " + formatValue(value)
-			if i < len(record.Keys)-1 {
-				response += ",\n\t"
-			}
+			tmp += "| " + formatValue(value) + " "
 		}
-		response += "\n}\n"
+		tmp += "|\n"
+		length = max(length, len(tmp))
+		response += tmp
 	}
 
-	fmt.Printf("Records returned: %v, Database Updated: %v, Time: %+v.\n",
-		len(result.Records),
-		result.Summary.Counters().ContainsUpdates(),
-		result.Summary.ResultAvailableAfter())
+	var header string
+	var separator string = "+"
+	for i := 0; i < length-2; i++ {
+		separator += "-"
+	}
+	separator += "+\n"
+
+	if result.Summary.Counters().ContainsUpdates() {
+		header += "Database Updated\n"
+	} else {
+		header = fmt.Sprintf("Records Returned: %v\n", len(result.Records))
+		header += separator
+
+		record := result.Records[0]
+		for _, key := range record.Keys {
+			header += fmt.Sprintf("| %s ", key)
+		}
+		header += "|\n" + separator
+	}
 
 	w.Header().Set("Content-Type", "text/plain")
-	fmt.Fprint(w, response)
+	fmt.Fprint(w, header+response+separator)
 }
 
 func main() {
