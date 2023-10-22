@@ -1,5 +1,7 @@
 #!/bin/bash
 
+set -e
+
 if ! which go &> /dev/null
 then
     if ! [ -d /usr/local/go ]; then
@@ -14,3 +16,8 @@ then
 fi
 
 go version
+(
+    cd server
+    go run server.go
+)
+
