@@ -137,7 +137,10 @@ int main(int, const char **)
         Json::Value response;
         std::istringstream response_stream(response_data);
         JSONCPP_STRING err;
-        Json::parseFromStream(reader, response_stream, &response, &err);
+        if (!Json::parseFromStream(reader, response_stream, &response, &err)) {
+            std::cout << response_data << std::endl;
+            continue;
+        }
 
         Json::StyledWriter writer;
         std::ofstream file("response.json");
