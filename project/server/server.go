@@ -7,7 +7,6 @@ import (
 	"net/http"
 
 	"github.com/neo4j/neo4j-go-driver/v5/neo4j"
-	"github.com/neo4j/neo4j-go-driver/v5/neo4j/dbtype"
 )
 
 const neo4jURI = "bolt://localhost:7687"
@@ -16,17 +15,6 @@ const neo4jPassword = "neo4j"
 
 type RequestData struct {
 	Request string `json:"request"`
-}
-
-func formatValue(value interface{}) string {
-	switch v := value.(type) {
-	case dbtype.Node:
-		return fmt.Sprintf("%d %v %v", v.Id, v.Labels, v.Props)
-	case dbtype.Relationship:
-		return fmt.Sprintf("%d (%d)-[%s]-(%d) %v", v.Id, v.StartId, v.Type, v.EndId, v.Props)
-	default:
-		return fmt.Sprintf("%v", v)
-	}
 }
 
 func request(w http.ResponseWriter, r *http.Request) {
@@ -61,7 +49,6 @@ func request(w http.ResponseWriter, r *http.Request) {
 	}
 
 	json, err := json.Marshal(result)
-	fmt.Printf("result: %s\n", string(json))
 
 	w.Header().Set("Content-Type", "application/json")
 	_, err = w.Write(json)
