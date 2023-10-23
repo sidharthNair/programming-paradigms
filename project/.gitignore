@@ -2,3 +2,9 @@ antlr/*
 !antlr/Cypher.g4
 !antlr/CMakeLists.txt
 !antlr/main.cpp
+
+pharo/pharo*
+pharo/Pharo11*
+pharo/bin/*
+pharo/lib/*
+pharo/PharoDebug.log
