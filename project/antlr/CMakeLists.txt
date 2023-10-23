@@ -15,8 +15,11 @@ include_directories(${ANTLR_Cypher_OUTPUT_DIR})
 find_package(CURL REQUIRED)
 include_directories(${CURL_INCLUDE_DIR})
 
+find_package(jsoncpp REQUIRED)
+include_directories(${JSON_INCLUDE_DUR})
+
 add_executable(cypher main.cpp
                ${ANTLR_Cypher_CXX_OUTPUTS})
 target_link_libraries(cypher antlr4_static)
-
 target_link_libraries(cypher ${CURL_LIBRARIES})
+target_link_libraries(cypher jsoncpp_lib)

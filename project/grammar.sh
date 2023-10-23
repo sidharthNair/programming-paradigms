@@ -29,8 +29,8 @@ set -e
     fi
 
     echo "Building ..."
-    cmake -Wno-dev -DCMAKE_BUILD_TYPE=Release . 2>> build.log
-    make -j $(nproc --all) 2>> build.log
+    cmake -Wno-dev -DCMAKE_BUILD_TYPE=Release .
+    make -j $(nproc --all)
 
     printf "Running executable ...\n\n"
     ./cypher

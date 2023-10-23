@@ -2,8 +2,8 @@ package main
 
 import (
 	"context"
+	"encoding/json"
 	"fmt"
-	"io/ioutil"
 	"net/http"
 
 	"github.com/neo4j/neo4j-go-driver/v5/neo4j"
@@ -13,6 +13,10 @@ import (
 const neo4jURI = "bolt://localhost:7687"
 const neo4jUser = "neo4j"
 const neo4jPassword = "neo4j"
+
+type RequestData struct {
+	Request string `json:"request"`
+}
 
 func formatValue(value interface{}) string {
 	switch v := value.(type) {
@@ -31,13 +35,16 @@ func request(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	body, err := ioutil.ReadAll(r.Body)
+	var data RequestData
+	decoder := json.NewDecoder(r.Body)
+	fmt.Println(r.Body)
+	err := decoder.Decode(&data)
 	if err != nil {
-		http.Error(w, "Error reading request body", http.StatusBadRequest)
+		http.Error(w, "Error parsing request", http.StatusBadRequest)
 		fmt.Println(err)
+		return
 	}
-
-	query := string(body)
+	request := data.Request
 
 	ctx := context.Background()
 	driver, err := neo4j.NewDriverWithContext(neo4jURI, neo4j.BasicAuth(neo4jUser, neo4jPassword, ""))
@@ -47,49 +54,22 @@ func request(w http.ResponseWriter, r *http.Request) {
 	}
 	defer driver.Close(ctx)
 
-	result, err := neo4j.ExecuteQuery(ctx, driver, query, nil, neo4j.EagerResultTransformer, neo4j.ExecuteQueryWithDatabase("neo4j"))
+	result, err := neo4j.ExecuteQuery(ctx, driver, request, nil, neo4j.EagerResultTransformer, neo4j.ExecuteQueryWithDatabase("neo4j"))
 	if err != nil {
 		http.Error(w, fmt.Sprintf("%s", err), http.StatusInternalServerError)
 		fmt.Println(err)
 		return
 	}
 
-	var response string
+	json, err := json.Marshal(result)
+	fmt.Printf("result: %s\n", string(json))
 
-	var length int = 0
-	for _, record := range result.Records {
-		var tmp string
-		for _, key := range record.Keys {
-			value, _ := record.Get(key)
-			tmp += "| " + formatValue(value) + " "
-		}
-		tmp += "|\n"
-		length = max(length, len(tmp))
-		response += tmp
+	w.Header().Set("Content-Type", "application/json")
+	_, err = w.Write(json)
+	if err != nil {
+		http.Error(w, "Failed to write response", http.StatusInternalServerError)
+		return
 	}
-
-	var header string
-	var separator string = "+"
-	for i := 0; i < length-2; i++ {
-		separator += "-"
-	}
-	separator += "+\n"
-
-	if result.Summary.Counters().ContainsUpdates() {
-		header += "Database Updated\n"
-	} else {
-		header = fmt.Sprintf("Records Returned: %v\n", len(result.Records))
-		header += separator
-
-		record := result.Records[0]
-		for _, key := range record.Keys {
-			header += fmt.Sprintf("| %s ", key)
-		}
-		header += "|\n" + separator
-	}
-
-	w.Header().Set("Content-Type", "text/plain")
-	fmt.Fprint(w, header+response+separator)
 }
 
 func main() {
