@@ -37,7 +37,6 @@ func request(w http.ResponseWriter, r *http.Request) {
 
 	var data RequestData
 	decoder := json.NewDecoder(r.Body)
-	fmt.Println(r.Body)
 	err := decoder.Decode(&data)
 	if err != nil {
 		http.Error(w, "Error parsing request", http.StatusBadRequest)
