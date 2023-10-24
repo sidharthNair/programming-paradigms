@@ -15,7 +15,23 @@ Class {
 { #category : #adding }
 GraphVis >> addEdgeFrom: startId to: endId [
 	| startNode endNode |
+	(nodes includesKey: startId)
+		ifFalse: [
+			| newNode |
+			newNode := Node new.
+			newNode setId: startId.
+			newNode setDescription: 'Id: ', startId asString.
+			self addNode: newNode.
+		].
 	startNode := nodes at: startId.
+	(nodes includesKey: endId)
+		ifFalse: [
+			| newNode |
+			newNode := Node new.
+			newNode setId: endId.
+			newNode setDescription: 'Id: ', endId asString.
+			self addNode: newNode.
+		].
 	endNode := nodes at: endId.
 	startNode getEdges do: [ :e |
 		e getEndNode = endNode 
@@ -27,7 +43,23 @@ GraphVis >> addEdgeFrom: startId to: endId [
 { #category : #adding }
 GraphVis >> addEdgeFrom: startId to: endId description: d [
 	| startNode endNode edge desc |
+	(nodes includesKey: startId)
+		ifFalse: [
+			| newNode |
+			newNode := Node new.
+			newNode setId: startId.
+			newNode setDescription: 'Id: ', startId asString.
+			self addNode: newNode.
+		].
 	startNode := nodes at: startId.
+	(nodes includesKey: endId)
+		ifFalse: [
+			| newNode |
+			newNode := Node new.
+			newNode setId: endId.
+			newNode setDescription: 'Id: ', endId asString.
+			self addNode: newNode.
+		].
 	endNode := nodes at: endId.
 	startNode getEdges do: [ :e |
 		e getEndNode = endNode 
