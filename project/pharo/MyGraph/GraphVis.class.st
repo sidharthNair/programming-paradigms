@@ -158,11 +158,11 @@ GraphVis >> loadJSON: filePath [
 		keys withIndexDo: [ :key :index |
 			| value id props description |
 			value := values at: index.
-			id := (value at: 'Id') asInteger.
-			props := (value at: 'Props') asString.
-			description := WriteStream on: ''.
-			(value includesKey: 'Type')
-				ifTrue: [ 
+			value ifNotNil: [ 
+				id := (value at: 'Id') asInteger.
+				props := (value at: 'Props') asString.
+				description := WriteStream on: ''.
+				(value includesKey: 'Type') ifTrue: [ 
 					| edge type startId endId |
 					type := (value at: 'Type') asString.
 					startId := (value at: 'StartId') asInteger.
@@ -179,8 +179,7 @@ GraphVis >> loadJSON: filePath [
 					edge startNode: startId.
 					edge endNode: endId.
 					edges add: edge.
-				]
-				ifFalse: [  
+				] ifFalse: [  
 					| node labels |
 					labels := (value at: 'Labels') asString.
 					node := Node new.
@@ -193,6 +192,7 @@ GraphVis >> loadJSON: filePath [
 					node setDescription: description contents. 
 					self addNode: node.
 				].
+			].
 		].
 	].
 	edges do: [ :edge |
