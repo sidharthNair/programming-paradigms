@@ -26,4 +26,3 @@ set -e
     ./pharo Pharo11-SNAPSHOT*.image visualize.st
 
 )
-
