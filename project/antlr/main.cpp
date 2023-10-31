@@ -12,6 +12,7 @@ using namespace antlrcpptest;
 using namespace antlr4;
 
 bool running = true;
+std::vector<std::string> history;
 
 void handleInterrupt(int signal)
 {
@@ -97,6 +98,39 @@ int main(int, const char **)
             break;
         }
 
+        if (command[0] == '/')
+        {
+            command.erase(0, 1);
+            command.push_back(' ');
+            size_t pos = 0;
+            std::string token;
+            if ((pos = command.find(" ")) != std::string::npos)
+            {
+                token = command.substr(0, pos);
+                if (token == "exit")
+                {
+                    break;
+                }
+                else if (token == "history")
+                {
+                    for (int i = 0; i < history.size(); i++)
+                    {
+                        std::cout << history[i] << std::endl;
+                    }
+                }
+                else
+                {
+                    std::cout << "Invalid command, options: /history, /exit" << std::endl;
+                }
+            }
+            std::cout << std::endl;
+            continue;
+        }
+        else
+        {
+            history.push_back(command);
+        }
+
         ANTLRInputStream input(command);
         CypherLexer lexer(&input);
         CommonTokenStream tokens(&lexer);
@@ -137,7 +171,8 @@ int main(int, const char **)
         Json::Value response;
         std::istringstream response_stream(response_data);
         JSONCPP_STRING err;
-        if (!Json::parseFromStream(reader, response_stream, &response, &err)) {
+        if (!Json::parseFromStream(reader, response_stream, &response, &err))
+        {
             std::cout << response_data << std::endl;
             continue;
         }
