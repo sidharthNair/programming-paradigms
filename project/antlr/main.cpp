@@ -94,12 +94,10 @@ int main(int argc, const char **argv)
     int rc;
     Json::StreamWriterBuilder writer;
 
-    bool external = false;
     std::string external_command;
     if (argc == 2)
     {
         external_command = argv[1];
-        external = true;
     }
 
     curl = curl_easy_init();
@@ -129,10 +127,11 @@ int main(int argc, const char **argv)
                                        "response TEXT NOT NULL);";
     sqlite3_exec(db, createTableSQL.c_str(), NULL, NULL, NULL);
 
-    while (running)
+    bool external = false;
+    while (running && !external)
     {
         std::string command;
-        if (!external)
+        if (external_command.empty())
         {
             command = getCommand();
             if (command.empty())
@@ -143,6 +142,7 @@ int main(int argc, const char **argv)
         else
         {
             command = external_command;
+            external = true;
         }
 
         if (!running)

@@ -2,6 +2,7 @@ antlr/*
 !antlr/Cypher.g4
 !antlr/CMakeLists.txt
 !antlr/main.cpp
+benchmark.log
 
 pharo/pharo*
 pharo/Pharo11*

@@ -46,6 +46,40 @@ set -e
     cmake -Wno-dev -DCMAKE_BUILD_TYPE=Release .
     make -j $(nproc --all)
 
-    printf "Running executable ...\n\n"
-    ./cypher
+    if [ "$#" -eq 0 ]; then
+        printf "Running executable ...\n\n"
+        ./cypher
+    elif [ "$#" -eq 2 ]; then
+        command=$1
+        runs=$2
+        if ! [[ "$runs" =~ ^[0-9]+$ ]]; then
+            echo "Error: number of runs must be an integer"
+            exit 1
+        fi
+
+        printf "Running \"$command\" $runs times. Logging output to benchmark.log ...\n\n"
+        printf "Running \"$command\" $runs times.\n" >../benchmark.log
+
+        runtimes=()
+        for i in $(seq 1 1 "$runs"); do
+            start_time=$(date +%s%3N)
+            ./cypher "$command" >>../benchmark.log
+            end_time=$(date +%s%3N)
+            elapsed_time=$(($end_time - $start_time))
+            printf "Runtime: $elapsed_time ms\n\n" >>../benchmark.log
+            runtimes+=($elapsed_time)
+        done
+
+        total=0
+        for runtime in "${runtimes[@]}"; do
+            total=$(($total + $runtime))
+        done
+
+        average_runtime=$(printf %.3f "$((10 ** 9 * $total / $runs))e-9")
+        echo "Average runtime: $average_runtime ms"
+
+    else
+        echo "Error: arguments must be the command to run in quotes, followed by the number of runs"
+        exit 1
+    fi
 )
