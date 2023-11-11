@@ -8,3 +8,5 @@ pharo/Pharo11*
 pharo/bin/*
 pharo/lib/*
 pharo/PharoDebug.log
+
+table/_build/*
