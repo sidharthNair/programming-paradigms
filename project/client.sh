@@ -18,6 +18,20 @@ set -e
         exit 1
     fi
 
+    if ! which sqlite3 &>/dev/null; then
+        echo "Installing sqlite ..."
+        wget https://www.sqlite.org/2023/sqlite-autoconf-3440000.tar.gz
+        tar xvfz sqlite-autoconf-3440000.tar.gz
+        (
+            cd sqlite-autoconf-3440000
+            ./configure --prefix=/usr/local
+            make
+            sudo make install
+        )
+        rm -rf sqlite-autoconf-3440000
+        rm sqlite-autoconf-3440000.tar.gz
+    fi
+
     if [ ! -e cmake/ ]; then
         (
             echo "Downloading antlr4 cpp runtime ..."

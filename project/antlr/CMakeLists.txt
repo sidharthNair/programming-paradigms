@@ -18,8 +18,13 @@ include_directories(${CURL_INCLUDE_DIR})
 find_package(jsoncpp REQUIRED)
 include_directories(${JSON_INCLUDE_DUR})
 
+find_package(SQLite3 REQUIRED)
+include_directories(${SQLite3_INCLUDE_DIRS})
+
 add_executable(cypher main.cpp
                ${ANTLR_Cypher_CXX_OUTPUTS})
+
 target_link_libraries(cypher antlr4_static)
 target_link_libraries(cypher ${CURL_LIBRARIES})
 target_link_libraries(cypher jsoncpp_lib)
+target_link_libraries(cypher ${SQLite3_LIBRARIES})
