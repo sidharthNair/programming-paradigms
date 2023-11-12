@@ -100,20 +100,6 @@ int main(int argc, const char **argv)
         external_command = argv[1];
     }
 
-    curl = curl_easy_init();
-    if (!curl)
-    {
-        std::cerr << "Error initializing curl" << std::endl;
-        return 1;
-    }
-
-    curl_easy_setopt(curl, CURLOPT_URL, "http://localhost:8080/request");
-    curl_easy_setopt(curl, CURLOPT_POST, 1L);
-
-    struct curl_slist *headers = NULL;
-    headers = curl_slist_append(headers, "Content-Type: application/json");
-    curl_easy_setopt(curl, CURLOPT_HTTPHEADER, headers);
-
     rc = sqlite3_open("cache.db", &db);
     if (rc)
     {
@@ -126,6 +112,21 @@ int main(int argc, const char **argv)
                                        "command TEXT NOT NULL,"
                                        "response TEXT NOT NULL);";
     sqlite3_exec(db, createTableSQL.c_str(), NULL, NULL, NULL);
+
+    curl = curl_easy_init();
+    if (!curl)
+    {
+        std::cerr << "Error initializing curl" << std::endl;
+        sqlite3_close(db);
+        return 1;
+    }
+
+    curl_easy_setopt(curl, CURLOPT_URL, "http://localhost:8080/request");
+    curl_easy_setopt(curl, CURLOPT_POST, 1L);
+
+    struct curl_slist *headers = NULL;
+    headers = curl_slist_append(headers, "Content-Type: application/json");
+    curl_easy_setopt(curl, CURLOPT_HTTPHEADER, headers);
 
     bool external = false;
     while (running && !external)
@@ -214,7 +215,7 @@ int main(int argc, const char **argv)
             if (rc != SQLITE_OK)
             {
                 std::cerr << "Error preparing select statement: " << sqlite3_errmsg(db) << std::endl;
-                return rc;
+                break;
             }
 
             rc = sqlite3_step(stmt);
@@ -259,7 +260,7 @@ int main(int argc, const char **argv)
                 if (rc != SQLITE_OK)
                 {
                     std::cerr << "Error invalidating cache: " << sqlite3_errmsg(db) << std::endl;
-                    return rc;
+                    break;
                 }
                 else
                 {
@@ -333,7 +334,7 @@ int main(int argc, const char **argv)
             if (rc != SQLITE_OK)
             {
                 std::cerr << "Error caching response: " << sqlite3_errmsg(db) << std::endl;
-                return rc;
+                break;
             }
             else
             {
