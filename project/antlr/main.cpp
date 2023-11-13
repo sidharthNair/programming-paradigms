@@ -68,17 +68,21 @@ std::string formatValue(const Json::Value &value)
 {
     std::stringstream ret;
     Json::FastWriter writer;
-    if (value.isMember("Type"))
+    if (value.isString())
+    {
+        ret << value.asString() << std::endl;
+    }
+    else if (value.isInt())
+    {
+        ret << value.asInt() << std::endl;
+    }
+    else if (value.isMember("Type"))
     {
         ret << value["ElementId"].asString() << " (" << value["StartId"].asString() << ")-[" << value["Type"].asString() << "]-(" << value["EndId"].asString() << ") " << writer.write(value["Props"]);
     }
     else if (value.isMember("Labels"))
     {
         ret << value["ElementId"].asString() << " " + writer.write(value["Labels"]) << " " << writer.write(value["Props"]);
-    }
-    else
-    {
-        ret << value.asString() << std::endl;
     }
     std::string tmp = ret.str();
     tmp.erase(std::remove(tmp.begin(), tmp.end(), '\n'), tmp.end());
@@ -309,6 +313,13 @@ int main(int argc, const char **argv)
         if (!result.empty())
         {
             std::stringstream header;
+            for (const Json::Value &element : response["Keys"])
+            {
+                header << "| " << element.asString() << " ";
+            }
+            header << "|\n";
+            length = std::max(length, (int)header.str().length());
+
             std::stringstream separator;
             separator << "+";
             for (int i = 0; i < length - 3; i++)
@@ -316,15 +327,8 @@ int main(int argc, const char **argv)
                 separator << "-";
             }
             separator << "+\n";
-            header << separator.str();
-            for (const Json::Value &element : response["Keys"])
-            {
-                header << "| " << element.asString() << " ";
-            }
-            header << "|\n"
-                   << separator.str();
 
-            std::cout << header.str() << result << separator.str();
+            std::cout << separator.str() << header.str() << separator.str() << result << separator.str();
         }
 
         if (!modifying && !got_cached)
